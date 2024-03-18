@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+}
+
+group 'com.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    junitVersion = '5.9.3'
+}
+
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    testImplementation('org.seleniumhq.selenium:selenium-java:4.9.0')
+    testImplementation("io.github.bonigarcia:webdrivermanager:5.7.0")
+    testImplementation('com.codeborne:selenide:7.2.1')
+    testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.4.0'
+    testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine'
+    testImplementation 'junit:junit:4.13.1'
+}
+
+task runTests(type: Test) {
+    systemProperties['selenide.browser'] = 'chrome'
+    systemProperties['selenide.headless'] = 'true'
+
+    useJUnitPlatform(){
+    }
+    testLogging.events("PASSED", "FAILED", "STARTED", "SKIPPED")
+}
+
+test {
+    useJUnitPlatform()
+}
